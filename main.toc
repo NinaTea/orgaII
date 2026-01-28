@@ -1,0 +1,12 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Un poco de historia}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Máquina de Turing}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Modelo de Von Neumann}{2}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Modelo de Hardvard}{3}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Computadoras de 2da Generación}{4}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}3era generación}{4}{subsection.1.5}%
+\contentsline {subsection}{\numberline {1.6}Problemas a resolver}{4}{subsection.1.6}%
+\contentsline {subsection}{\numberline {1.7}Resumen del capítulo}{4}{subsection.1.7}%
+\contentsline {section}{\numberline {2}La era del silicio}{6}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Nuevo paradigma de arquitectura: RISC}{6}{subsection.2.1}%
+\contentsline {section}{\numberline {3}Arquitecura vs. Microarquitectura}{7}{section.3}%

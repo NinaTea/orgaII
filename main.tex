@@ -1,0 +1,230 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[spanish]{babel} % espanol
+\usepackage[utf8]{inputenc} % acentos sin codigo
+\usepackage{graphicx} % graficos
+\usepackage{hyperref}
+\usepackage{makeidx}
+
+\usepackage{blindtext}
+
+\usepackage[most]{tcolorbox}
+
+\makeatletter
+\NewDocumentCommand{\mynote}{+O{}+m}{%
+  \begingroup
+  \tcbset{%
+    noteshift/.store in=\mynote@shift,
+    noteshift=1.5cm
+  }
+  \begin{tcolorbox}[nobeforeafter,
+    enhanced,
+    sharp corners,
+    toprule=1pt,
+    bottomrule=1pt,
+    leftrule=0pt,
+    rightrule=0pt,
+    colback=yellow!20,
+    #1,
+    left skip=\mynote@shift,
+    right skip=\mynote@shift,
+    overlay={\node[right] (mynotenode) at ([xshift=-\mynote@shift]frame.west) {\textbf{Nota:}} ;},
+    ]
+    #2
+  \end{tcolorbox}
+  \endgroup
+  }
+\makeatother
+
+
+\makeindex
+
+\begin{document}
+
+\begin{titlepage}
+
+\begin{center}
+\vspace*{-1in}
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[width=8cm]{imagenes/portada/supercomputadora_clementina_xxi_1.jpg}
+\end{center}
+\end{figure}
+
+In Furfi we trust\\
+\vspace*{0.15in}
+\vspace*{0.6in}
+\begin{large}
+\end{large}
+\vspace*{0.2in}
+\begin{Large}
+\textbf{Final de Orga II resumen} \\
+\end{Large}
+\vspace*{0.3in}
+\begin{large}
+\textit{fuente: \href{https://www.cubawiki.com.ar}{cubawiki}}\\
+\end{large}
+\vspace*{0.3in}
+\rule{80mm}{0.1mm}\\
+\vspace*{0.1in}
+\begin{large}
+Versión en \LaTeX: \\
+Camila Gallo\\
+\end{large}
+\end{center}
+
+\end{titlepage}
+\newpage
+\printindex
+\tableofcontents
+\newpage
+
+\section{Un poco de historia}
+\subsection{Máquina de Turing}
+En 1936, Turing publica su paper en donde define lo que es una máquina de Turing. Esto es un modelo matemático basado en autómatas que "traduce" las fórmulas matemáticas en programas. Es la primera vez, que se define un modelo de computación y sienta las bases de lo que hoy entendemos como computación.
+
+\subsection{Modelo de Von Neumann}
+Basado en el modelo teórico de Turing, 9 años después, publica un paper en donde define en detalle el modelo de cómputo desarrollado por Turing años antes, y propone este modelo de computadora.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\textwidth]{imagenes/cap1/ModeloVonNeumann.png}
+    \caption{Modelo simplificado}
+    \label{fig:placeholder}
+\end{figure}
+
+Este modelo fue el predominante dentro de la 1era y 2da generación de computadoras. Los componentes más importantes eran:
+
+
+\begin{itemize}
+    \item Central aritmética (CA): Una unidad de procesamiento aritmético, de lógica y registros.
+    \item Central de Control (CC): Una implementación de la máquina de estados, con registro de instrucciones y registro Contador de Programa.
+    \item Memoria: Para guardar los datos y el código que se ejecutaban en ese momento. No había espacio para otro programa. Ambos se almacenaban en el mismo lugar, esto daría problemas a un cuello de botella.
+    \item I/O: Mecanismos tanto de entrada como de salida para que se pudieron ingresar datos y comandos a la computadora y para que esta puediera enviar resultados al exterior.
+    \item Memoria Externa: Era otro medio de almacenamiento con mayor capacidad que la Unidad de Memoria. Se guardaban otros programas y datos que luego se copiaban a la Unidad de Memoria. Por ejemplo, cintas perforadas.
+\end{itemize}
+
+
+Tenemos entonces un modelo en donde hay un programa almacenado,
+los datos y el programa están en el mismo y único banco de memoria. 
+El cpu es una máquina de estados perpétua.
+
+
+\begin{figure}[h!]
+   \centering
+    \includegraphics[width=1\textwidth]{imagenes/cap1/maquinaDeEstados.png}
+    \caption{Máquina de estados de la máquina de Von Neumann}
+    \label{fig:placeholder}
+\end{figure}
+
+
+\subsection{Modelo de Hardvard}
+
+Con el pasar de los años, en menos de dos décadas, se necesitó leer \textbf{al mismo tiempo}(o al menos que se comporte como así lo fuese) tanto los datos de la operación a realizar como sus operandos. Entonces, claramente había un problema con el modelo de Von Neumann porque al haber un único banco de memoria con buses compartidos, no se podía hacer ambas cosas "a la vez". Esto se conoce como el cuello de botella de Von Neumann.
+
+Para solucionar el problema del cuello de botella, revisaron la arquitectura de la computadora Mark I, un computador electromecánico desarrollado por IBM y la universidad de Harvard entre 1939 y 1944. Es decir, era anterior a la ENDVAC de Von Neumann.
+
+La Mark I tenía datapaths diferentes para los datos que ingresaban y para las instrucciones que se ejecutaban. Por eso era interesante a pesar de ser un computador en decimal y que tarda entre 0.3 y 10 segundos para cada cálculo.
+
+
+\subsection{Computadoras de 2da Generación}
+
+Son computadoras con transistores. Aparecen en la década del 50. Las ventajas que tienen es que tienen menor consumo, menor espacio y mejor desempeño a largo plazo.
+
+También aparecen los lenguajes de alto nivel. En 1957 se escribe el primer compilador de FORTRAN.
+
+Se consolida IBM, nacen XEROX y DEC.
+
+\subsection{3era generación}
+
+Consiste de las computadores de circuitos integrados (CI). Es decir, chips. Aparecen en la época de los 60.
+
+Se produjeron los minicomputadores y nace la programación estructurada. Se libera el primer compilador de C y nace UNIX.\\
+
+\mynote{En 1971, Intel presenta el CI 4004, el primer microprocesaor de la historia.}
+
+\subsection{Problemas a resolver}
+
+\begin{itemize}
+   \item Los usuarios querían disminuir el costo de actualización de los equipos.
+   \item Los equipos eran incompatibles con otros modelos de la misma marca. Cambiaba la ISA, las toolchains, los SO, etc. Cada mercado era distinto.
+   \item Cada actualización te hacía cambiar todo.
+   \item Empieza a hacer más ruido la palabra compatibilidad. Al menos para IBM.
+
+\end{itemize}
+
+\subsection{Resumen del capítulo}
+
+\subsection*{Arquitectura Harvard}
+\begin{itemize}
+  \item Las instrucciones y los datos se leen desde memorias físicamente diferentes y por caminos de señal diferentes.
+  \item Se pueden tener tecnologías y organizaciones diferentes para la memoria usada para instrucciones y para datos, además de caminos de señal (buses) independientes.
+  \item Si tenés buses diferentes, tenés dos direcciones \texttt{0x0000\_0000} de memoria.
+  \item La memoria de instrucciones puede estar organizada en palabras de 4 bytes (32 bits) y la de datos en 1 byte (8 bits), sin que nada se rompa.
+\end{itemize}
+
+\subsection*{Arquitectura Von Neumann}
+\begin{itemize}
+  \item Las instrucciones y los datos se guardan y leen de la misma unidad de memoria.
+  \item Comparten la misma organización y tecnología.
+  \item No hay separación entre memoria de instrucciones y memoria de datos.
+\end{itemize}
+
+
+Los microprocesadores actuales presentan una organización siguiendo el modelo de Von Neumann a los usuarios. Pero, desde los 90 que se usa una tecnología \textbf{split cache}. Se dividen los primeros niveles de memoria cache en una de datos y otra de instrucciones con dos buses independientes para accederlas en paralelo. Es decir, un modelo Hardvard. Sin embargo, los niveles de memoria más externos almacenan datos e instrucciones juntos, o sea, Von Neumann. El subsistema de memoria cache está diseñado y dimensionado para que se resuelvan en el él la mayoría de los accesos de memoria de parte de las CPUs. Un valor típico de eficiencia de un cache de Nivel 1 es 80\%. O sea, se resuelve en una memoria organizada según el modelo de Hardvard.
+\\
+
+\mynote{El nivel 1 de cache no es estrictamente Hardvard porque quien programa ve un solo espacio de direccionamiento en lugar de dos. Esta división la realiza el sistema Cache.}
+
+\mynote{
+   Sólo los procesador de señales (DSP) son puramente Hardvard. Los procesadores de propósito general actuales y algún que otro microcontrolador CORTEX-M trabajan con split cache en nivel 1 de su jerarquía de memoria y después juntan código y datos en los niveles restantes.
+}
+
+\mynote{Como todos presentan un mapa de direcciones de memoria único al programador, se denominan "casi Von Neumann".}
+
+\section{La era del silicio}
+
+Hay dos aspectos importantes cuando se diseña un computador. El diseño del:
+
+\begin{itemize}
+   \item El Datapath. Es el conjunto de recursos que se utilizan para que los números se almacenen en registros y las operacion entre ellos se puedan ejecutar. 
+   \item El Control. Es la lógica necesaria para controlar el correcto envío por el datapath de las operaciones que se van a realizar.
+\end{itemize}
+
+El control es el item más complejo. Y en IBM, a Maurice Wilkes, se le ocurrió el concepto de \textbf{microcódigo}, una lógica de control para un microprocesador. En ese momento como la ROM era más barata, se propuso implementar el microcódigo en una memoria de estas y cada palabra era una microinstrucción(pequeños programas).
+A mitad de la década del 60, IBM anuncia que sus modelos de mainframes IBM 360 se basarán en microcódigo.
+
+Este control por microcódigo dio a luz al diseño de una ISA con instrucciones de complejidad creciente. La complejidad se cargaba en el microcódigo en la CPU y ocupaba la menor memoria posible porque no se podía minimizar el tamaño de los datos, era lo que era. \\
+
+\mynote{Para el caso del código, menos instrucciones implica menos memoria.}
+
+Acá elijo no anotar varias cosas.
+
+\subsection{Nuevo paradigma de arquitectura: RISC}
+
+Antes de las computadoras personales, lo que predominaban era los mainframes y quienes dominaban el mercado eran IBM, DEC, Amdahl, entre otros.
+
+En los 80, Intel lanza los primeros microprocesadores de 16 bits y arrasa con todo. No olvidemos que el se de instrucciones tiene una complejidad creciente con cada lanzamiento. 
+
+Durante la época de los años 60 y 70, IBM, Control Data Corporation y Data General, lanzan lines de investigación para el diseño de chips con pocas pocas instrucciones simples. En los años 80, en la universidad de Berkley y en la Stanford, se publican los primeros papers donde se presenta una arquitectura antagonista a la que dominaba en ese momento llamada RISC. Por sus siglas en inglés: Reduced Instruction Set Computer. 
+
+\mynote{Lo que motiva a llamar a los procesadores de ese entonces como CISC: Complex Instruction Set Computer.}
+\\
+En RISC lo que importa es lo siguiente
+
+\begin{itemize}
+   \item Hay 32 registros de propósito general(O sea, una banda).
+   \item Las instrucciones se ejecutan en un sólo ciclo de clocl.
+   \item Las instrucciones derivan en códigos de operación de igual tamaño y formato.
+   \item Las instrucciones deben ser sencillas de decodificar. 
+   \item No se utiliza microcodigo. O sea, no existen instrucciones complejas. Ni mul ni div.
+   \item Los datos en memoria se accenden mediante LOAD y STORE.
+   
+\end{itemize}
+
+\mynote{ Por estas razones, verificar una máquina RISC es más simple y es menor la probabilidad de tener un bug en el procesador.}
+
+\mynote{ Es esperable tener programas de mayor tamaño.}
+
+\section{Arquitecura vs. Microarquitectura}
+
+\end{document}
