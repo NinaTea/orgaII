@@ -152,35 +152,6 @@ Se produjeron los minicomputadores y nace la programación estructurada. Se libe
 
 \end{itemize}
 
-\subsection{Resumen del capítulo}
-
-\subsection*{Arquitectura Harvard}
-\begin{itemize}
-  \item Las instrucciones y los datos se leen desde memorias físicamente diferentes y por caminos de señal diferentes.
-  \item Se pueden tener tecnologías y organizaciones diferentes para la memoria usada para instrucciones y para datos, además de caminos de señal (buses) independientes.
-  \item Si tenés buses diferentes, tenés dos direcciones \texttt{0x0000\_0000} de memoria.
-  \item La memoria de instrucciones puede estar organizada en palabras de 4 bytes (32 bits) y la de datos en 1 byte (8 bits), sin que nada se rompa.
-\end{itemize}
-
-\subsection*{Arquitectura Von Neumann}
-\begin{itemize}
-  \item Las instrucciones y los datos se guardan y leen de la misma unidad de memoria.
-  \item Comparten la misma organización y tecnología.
-  \item No hay separación entre memoria de instrucciones y memoria de datos.
-\end{itemize}
-
-
-Los microprocesadores actuales presentan una organización siguiendo el modelo de Von Neumann a los usuarios. Pero, desde los 90 que se usa una tecnología \textbf{split cache}. Se dividen los primeros niveles de memoria cache en una de datos y otra de instrucciones con dos buses independientes para accederlas en paralelo. Es decir, un modelo Hardvard. Sin embargo, los niveles de memoria más externos almacenan datos e instrucciones juntos, o sea, Von Neumann. El subsistema de memoria cache está diseñado y dimensionado para que se resuelvan en el él la mayoría de los accesos de memoria de parte de las CPUs. Un valor típico de eficiencia de un cache de Nivel 1 es 80\%. O sea, se resuelve en una memoria organizada según el modelo de Hardvard.
-\\
-
-\mynote{El nivel 1 de cache no es estrictamente Hardvard porque quien programa ve un solo espacio de direccionamiento en lugar de dos. Esta división la realiza el sistema Cache.}
-
-\mynote{
-   Sólo los procesador de señales (DSP) son puramente Hardvard. Los procesadores de propósito general actuales y algún que otro microcontrolador CORTEX-M trabajan con split cache en nivel 1 de su jerarquía de memoria y después juntan código y datos en los niveles restantes.
-}
-
-\mynote{Como todos presentan un mapa de direcciones de memoria único al programador, se denominan "casi Von Neumann".}
-
 \section{La era del silicio}
 
 Hay dos aspectos importantes cuando se diseña un computador. El diseño del:
@@ -198,7 +169,6 @@ Este control por microcódigo dio a luz al diseño de una ISA con instrucciones 
 \mynote{Para el caso del código, menos instrucciones implica menos memoria.}
 
 Acá elijo no anotar varias cosas.
-
 \subsection{Nuevo paradigma de arquitectura: RISC}
 
 Antes de las computadoras personales, lo que predominaban era los mainframes y quienes dominaban el mercado eran IBM, DEC, Amdahl, entre otros.
@@ -224,6 +194,35 @@ En RISC lo que importa es lo siguiente
 \mynote{ Por estas razones, verificar una máquina RISC es más simple y es menor la probabilidad de tener un bug en el procesador.}
 
 \mynote{ Es esperable tener programas de mayor tamaño.}
+
+\subsection{Resumen del capítulo}
+
+\subsection*{Arquitectura Harvard}
+\begin{itemize}
+  \item Las instrucciones y los datos se leen desde memorias físicamente diferentes y por caminos de señal diferentes.
+  \item Se pueden tener tecnologías y organizaciones diferentes para la memoria usada para instrucciones y para datos, además de caminos de señal (buses) independientes.
+  \item Si tenés buses diferentes, tenés dos direcciones \texttt{0x0000\_0000} de memoria.
+  \item La memoria de instrucciones puede estar organizada en palabras de 4 bytes (32 bits) y la de datos en 1 byte (8 bits), sin que nada se rompa.
+\end{itemize}  
+
+\subsection*{Arquitectura Von Neumann}
+\begin{itemize}
+  \item Las instrucciones y los datos se guardan y leen de la misma unidad de memoria.
+  \item Comparten la misma organización y tecnología.
+  \item No hay separación entre memoria de instrucciones y memoria de datos.
+\end{itemize}  
+
+
+Los microprocesadores actuales presentan una organización siguiendo el modelo de Von Neumann a los usuarios. Pero, desde los 90 que se usa una tecnología \textbf{split cache}. Se dividen los primeros niveles de memoria cache en una de datos y otra de instrucciones con dos buses independientes para accederlas en paralelo. Es decir, un modelo Hardvard. Sin embargo, los niveles de memoria más externos almacenan datos e instrucciones juntos, o sea, Von Neumann. El subsistema de memoria cache está diseñado y dimensionado para que se resuelvan en el él la mayoría de los accesos de memoria de parte de las CPUs. Un valor típico de eficiencia de un cache de Nivel 1 es 80\%. O sea, se resuelve en una memoria organizada según el modelo de Hardvard.
+\\
+
+\mynote{El nivel 1 de cache no es estrictamente Hardvard porque quien programa ve un solo espacio de direccionamiento en lugar de dos. Esta división la realiza el sistema Cache.}
+
+\mynote{
+   Sólo los procesador de señales (DSP) son puramente Hardvard. Los procesadores de propósito general actuales y algún que otro microcontrolador CORTEX-M trabajan con split cache en nivel 1 de su jerarquía de memoria y después juntan código y datos en los niveles restantes.
+}   
+
+\mynote{Como todos presentan un mapa de direcciones de memoria único al programador, se denominan "casi Von Neumann".}
 
 \section{Arquitecura vs. Microarquitectura}
 
