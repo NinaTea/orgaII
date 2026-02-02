@@ -1,11 +1,16 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage[spanish]{babel} % espanol
 \usepackage[utf8]{inputenc} % acentos sin codigo
-\usepackage{graphicx} % graficos
+\usepackage{graphicx,wrapfig,lipsum}
+\usepackage{float}
 \usepackage{hyperref}
 \usepackage{makeidx}
-
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage[a4paper,margin=2cm]{geometry}
 \usepackage{blindtext}
+\usepackage{subfig}
+
 
 \usepackage[most]{tcolorbox}
 
@@ -39,11 +44,9 @@
 \makeindex
 
 \begin{document}
-
 \begin{titlepage}
 
 \begin{center}
-\vspace*{-1in}
 \begin{figure}[htb]
 \begin{center}
 \includegraphics[width=8cm]{imagenes/portada/supercomputadora_clementina_xxi_1.jpg}
@@ -51,21 +54,16 @@
 \end{figure}
 
 In Furfi we trust\\
-\vspace*{0.15in}
-\vspace*{0.6in}
-\begin{large}
-\end{large}
-\vspace*{0.2in}
 \begin{Large}
 \textbf{Final de Orga II resumen} \\
 \end{Large}
-\vspace*{0.3in}
+
 \begin{large}
 \textit{fuente: \href{https://www.cubawiki.com.ar}{cubawiki}}\\
 \end{large}
-\vspace*{0.3in}
+
 \rule{80mm}{0.1mm}\\
-\vspace*{0.1in}
+
 \begin{large}
 Versión en \LaTeX: \\
 Camila Gallo\\
@@ -197,7 +195,7 @@ En RISC lo que importa es lo siguiente
 
 \subsection{Resumen del capítulo}
 
-\subsection*{Arquitectura Harvard}
+\subsubsection{Arquitectura Harvard}
 \begin{itemize}
   \item Las instrucciones y los datos se leen desde memorias físicamente diferentes y por caminos de señal diferentes.
   \item Se pueden tener tecnologías y organizaciones diferentes para la memoria usada para instrucciones y para datos, además de caminos de señal (buses) independientes.
@@ -205,7 +203,7 @@ En RISC lo que importa es lo siguiente
   \item La memoria de instrucciones puede estar organizada en palabras de 4 bytes (32 bits) y la de datos en 1 byte (8 bits), sin que nada se rompa.
 \end{itemize}  
 
-\subsection*{Arquitectura Von Neumann}
+\subsubsection{Arquitectura Von Neumann}
 \begin{itemize}
   \item Las instrucciones y los datos se guardan y leen de la misma unidad de memoria.
   \item Comparten la misma organización y tecnología.
@@ -225,5 +223,384 @@ Los microprocesadores actuales presentan una organización siguiendo el modelo d
 \mynote{Como todos presentan un mapa de direcciones de memoria único al programador, se denominan "casi Von Neumann".}
 
 \section{Arquitecura vs. Microarquitectura}
+
+\subsection{Arquitectura}  
+Es el \textbf{conjunto de recursos accesibles para quien programa}. Se suelen mantener a lo largo de distintos modelos de procesadores. Estos recursos incluyen:
+
+\begin{itemize}
+  \item Registros
+  \item Set de instrucciones
+  \item Estructuras de memoria relacionadas(por ej. Descriptores de páginas)
+\end{itemize}
+
+
+\subsection{Microarquitectura}
+Es la \textbf{implementación} de la arquitectura, el diseño lógico detrás del set de registros y del modelo de programación. Cambia de modelo a otro dentro de una misma familia de procesadores.
+Se trata de definir acá los aspectos más relevantes en la arquitectura de un computador para maximizar el rendimiento del procesador pero sin dejar de lado el costo o consumo de energía, etc.
+
+Incluye el diseño de
+
+\begin{itemize}
+  \item El modo en el que se manejará la memoria y sus modos de direccionamiento
+  \item El set de instrucciones
+  \item Los bloques funciones del CPU: estos son, el File register, el data path y el diseño de la lógica de control
+  \item e implementación del circuito integrado, su encapsulado, su montaje, alimentación y refrigeración
+
+\end{itemize}
+
+\subsection{ISA}
+
+Cuando hablamos de ISA, nos referimos al Instruction Set Architecture que son el conjunto de set de instrucciones visibles para el programador. Además es el límite entre el software y el hardware.
+Y define cosas como:
+
+\begin{itemize}
+  \item La clase de ISA: Con prop general vs Registros dedicados. ISAs registro-memoria vs ISAs Load Store.
+  \item El direccionamiento a memoria. La alineación obligatoria de los datos vs la administración de los bytes.
+  \item El modo de direccionamiento: Cómo se especifican los operandos. 
+  \item El tipo y tamaños de los operandos: Los diferentes tamaños y precisiones. Por ejemplo, enteros, floats y doubles no son tratados igual.
+  \item Operaciones: Si es una arquitectura RISC o CISC. O sea, pocas instrucciones simples o muchas y complejas.
+  \item Instrucciones de control de flujo: Que definen los jumps, y los calls.
+  \item La longitud del código: Si las instrucciones que provee la ISA son de tamaño fijo o variable.
+
+\end{itemize}
+
+Entonces, podemos decir que la microarquitectura comprende la Organización y el Hardware.\\
+
+\mynote{Microarquitectura = Organización + Hardware.}
+\\
+
+\subsection{Organización}
+
+Se refiere a los detalles de implementación de la ISA.
+
+\begin{itemize}
+  \item La organización e interconexión de la memoria.
+  \item El diseño de los diferentes bloques de la CPU y la implementación del set de instrucciones. 
+  \item La implementación del paralelismo en el nivel de instrucciones y datos.
+\end{itemize}
+
+Podemos entonces encontrar dos ISAs iguales pero con distinta organización.\\
+
+\mynote{Los procesadores AMD FX y los Intel Core i7 tienen la misma ISA pero organizan su caché y ejecución de maneras distintas.}
+\\
+\subsection{Hardware}
+
+Son los detalles de diseño lógico y la tecnología de fabricación. Entonces, pueden existir procesadores con la misma ISA y la misma organización pero distintos a nivel de hardware y diseño lógico.
+
+\mynote{El Pentium 4 diseñado para escritorio es distinto en nivel del hardware al Pentium 4M diseñado para notebooks. Este último tiene una lógica de control para el consumo de energía.}
+\\
+
+\section{Implementando la arquitectura}
+\subsection{El procesador}
+
+Sea cual sea el set de instrucciones a implementar, \textbf{hay dos pasos fundamentales} que cualquier instrucción \textbf{debe} realizar.
+
+\begin{enumerate}
+  \item Aumentar el Program Counter(PC) para que apunte a la siguiente instrucción.
+  \item Leer uno o dos registros(depende de la instrucción) contenidos en la palabra de la instrucción.
+\end{enumerate}
+
+Y las acciones posteriores depende de la instrucción. En general, el siguiente paso es utilizar la ALU para acceder a memoria (hay que calcular la dirección de memoria). Además, las instrucción aritméticas y lógicas usarán la ALU para ejecutar la operación solicitada y/o los saltos condicionales para evaluar la condición de verdad del salto.
+\subsection{Implementación del procesador}
+
+\subsubsection{El datapath, las unidades de control y el control}
+El data path es el camino que recorren las instrucciones y los datos por los buses internos y los bloques circuitales necesarios para su procesamiento.
+Inicia en la memoria cuando se busca una instrucción o dato. \textbf{Afecta al PC}, que se debe ajustar a la siguiente instrucción. 
+
+Por ejemplo, para el siguiente data path, se suma 4 el PC porque asumimos una CPU RISC con tamaño de instrucción de 32 bits (4 bytes).
+
+\begin{figure}[H]
+   \centering
+    \includegraphics[width=1\textwidth]{imagenes/cap3/datapathConControl.png}
+    \caption{datapath de un CPU RISC de tamaño 4 bytes}
+    \label{fig:placeholder}
+\end{figure}
+
+\subsubsection{El register file}
+
+Es parte fundamental en el data path y consiste de un arreglo de tamaño N, o sea N registros, a los cuales se pueden acceder para lectura o escritura. Están numerados del 0 al N - 1.\\
+
+\mynote{Se puede implementar con un decodificador para cada puerto de lectura/escritura y un arreglo de registros construido a partir de flips fliops D.}
+
+\begin{figure}[H]
+   \centering
+    \includegraphics[width=0.75\textwidth]{imagenes/cap3/registerfile.png}
+    \caption{Representación de un registerfile de NxJ (N registros de J bits cada uno)}
+    \label{fig:registerFile}
+\end{figure}
+
+La lectura de un registro no cambia ningún estado y la salida Q de un FF está disponible. Sólo necesitamos proporcionar un número de registro como entrada y la única salida serán los datos contenidos en ese registro. Como se muestra en la figura de arriba.
+
+Para escribir en un registro, necesitaremos tres entradas: El número de registro adentro del arrelgo, los datos  aescribir y un clock que controla la escritura en el registro.
+
+Se usa un Register File con dos puertos de lectura y uno de escritura.
+
+Como se ve en la figura \ref{fig:registerFile}, para evitar atascos y agilizar el procesamiento es conveniente tener al menos dos puertos de lectura. Así, pueden leerse los dos operandos de una instrucción a la vez.
+
+Un puerto es una entrada de N bits al que se le envía el número de registro al que se quiere acceder. Luego, el contenido del registro sale por las J líneas Read data 1 o Read data 2 según el puerto seleccionado.
+
+Hay un sólo puerto de escritura porque imaginate el quilombo que se arma si hay dos procesos que quieren escribir a la vez.
+
+En la siguiente imagen hay un Register File esquematizado en detalle.
+
+\begin{figure}[H]
+   \centering
+    \includegraphics[width=0.75\textwidth]{imagenes/cap3/registerFileEnDetalle.png}
+    \caption{Representación de un registerfile en detalle}
+    \label{fig:registerFile}
+\end{figure}
+
+\subsection{Pipeline}
+
+\begin{figure}[H]
+   \centering
+    \includegraphics[width=0.75\textwidth]{imagenes/cap3/maquinaDeEstados.png}
+    \caption{Máquina de estados elemental}
+    \label{fig:registerFile}
+\end{figure}
+
+Un procesador ejecuta una máquina de estados compuesta por diferentes etapas. En las primeras generaciones de microprocesadores, cada etapa se ejecutaba durante uno o más ciclos de clock, durante los cuales la CPU entera estaba dedicada a ella. Una vez finalizada una etapa, en el siguiente ciclo de clock se pasaba a ejecutar la siguiente. De este modo, ejecutar una instrucción llevaba varios ciclos de clock.
+
+Con los años, surge el pipeline. \textbf{El pipeline} permite crear el efecto de superponer en el tiempo la ejecución de varias instrucciones a la vez. Formaliza el concepto de \textbf{Instruction Level Paralelism(ILP)} y requiere muy poco o ningún hardware adicional.
+Solo necesita que los bloques del procesador que resuelven la máquina de estados de ejecución de una instrucción operen de forma simultánea. Esto de logra si \textbf{todos los bloques funcionales trabajan en paralelo, pero cada uno en una instrucción diferente.} Cada parte se denomina etapa(stage).
+
+En la figura  \ref{fig:pipelineIdeal} se ve una representación ideal.
+
+\begin{figure}[H]
+   \centering
+    \includegraphics[width=0.75\textwidth]{imagenes/cap3/pipelinaIdeal.png}
+    \caption{Modelo teórico y representación de una situación ideal}
+    \label{fig:pipelineIdeal}
+\end{figure}
+
+Viendo la figura del modelo ideal, se pueden llegar a conclusione preliminares:
+
+\begin{enumerate}
+  \item El pipeline llega  a su \textbf{condición de régimen} luego de tantos ciclos de clock como etapas tenga.
+  \item En un pipeline de 5 etapas, y en el \textbf{caso ideal} en que cada etapa consuma solamente un ciclo de clock, una arquitectura pipeline provee un resultado de instrucción por cada ciclo de clock, a partir del ciclo de clock en el cual se llega a resolver la primer instrucción.
+  \item Este escenario permanente es puramente teórico, en la práctica no se cumple todo el tiempo.
+\end{enumerate}
+
+A primera vista, una tendería a pensar que agregar más etapas simples mejoraría la performance, pero antes de agregarlas, deberíamos preguntarnos "¿Por qué? ¿Vale la pena?"
+
+Si sabemos el tiempo de procesamiento interno de una instrucción para una arquitectura no pipeline, al saber las etapas que tiene, si lo pasamos a una estructura pipeline, el tiempo de ejecución se reduciría proporcionalmente a la cantidad de etapas porque ahora estamos procesando las instrucciones en paralelo.
+
+Si llamamos TPI, Time Per Instruction, al tiempo medido entre el resultado de dos instrucciones consecutivas, la siguiente expresión resume todo el análisis.
+
+TPI = \[
+\frac{\text{Tiempo por instrucción en la CPU no pipeline}}{\text{Cantidad de etapas}}
+\]
+
+La realidad es que como la situación ideal es justamente ideal, en la práctica existen \textbf{overheads introducidos por el hardware} de implementación del pipeline, que suman \textbf{pequeñas demoras} en la interfaz entre cada una de sus etapas. Aunque resultan lo suficientemente pequeñaz como para aceptar calcular el TPI ideal así.
+
+El resultado es que el efecto del pipeline en la práctica se percibe una cantidad de ciclos de clock significativamente menor para ejecutar cada instrucción. \textbf{El pipeline no reduce el tiempo de ejecución de cada instrucción individual}, sino que al aplicarse en paralelo al flujo de instrucciones, incrementa el número de instrucciones completadas por unidad de tiempo.\\
+
+\mynote{Más aún, el overhead del pipeline perjudica el tiempo de ejecución individual, aunque de manera poco significativa al agregar un $$\delta$$ t a cada instrucción.}
+
+El rendimiento (throughput) del procesador mejora notablemente ya que los programas se ejecutan notablemente más rápido.
+
+A pesar de la mejora en el performance que ofrece un pipeline, también tiene sus obstáculos que cospiran contra la eficiencia de este.
+
+\begin{enumerate}
+  \item Obstáculos estructurales.
+  \item Obstáculos de datos.
+  \item Obstáculos de control.
+\end{enumerate}
+
+\mynote{Al efecto ocasionado por un obstáculo se lo llama \textbf{pipeline stall} y su efecto degrada la performance del procesador.}
+
+
+\subsection{Obstáculos estructurales de un pipeline}
+
+Los obstáculos estructurales tienen diversos orígenes, puede ser que \textbf{una etapa no esté lo suficientemente atomizada} y para completarse necesita más de un ciclo de clock.
+Las instrucciones pueden \textbf{caer en conflicto de recursos para su ejecución} si dos instrucciones que utilizarán esa etapa están más próximas del tiempo que necesita esta etapa para procesar su parte.
+Este grupo de instrucciones, entonces, no pueden pasar por esa etapa del pipeline en un ciclo de clock. Y por eso, una de las instrucciones \textbf{debe detenerse.} Como consecuencia \textbf{el CPI(ciclos por instrucción) se incrementa en 1 o más respecto del valor ideal.} 
+
+
+\textbf{Ejemplo\\} Tenemos un procesador que sólo tiene una etapa para acceder a memoria y la comparte para acceso a datos e instrucciones.
+
+En el caso de que se necesite un operando de memoria, el acceso para traer este operando \textbf{interferirá con la búsqueda del operando} de una instrucción más adelante del programa.
+
+\begin{figure}[H]
+   \centering
+    \includegraphics[width=0.75\textwidth]{imagenes/cap3/ejemploEstruc.png}
+    \caption{Ejemplo de pipeline de un procesador con datapath compartido}
+    \label{fig:ejemplo}
+\end{figure}
+También interferirá con el fetch en la siguiente instrucción. Dicha situación se esquematiza en la figura \ref{fig:ejemplo}.
+
+
+Por cada obstáculo, se pospone una operación y entonces nos queda CPI = CPI + 1. En general, la cantidad de CPI que se incrementa es igual a la cantidad de concurrencias menos 1, en el lapso considerado. Para este ejemplo quedaría.
+
+
+\begin{figure}[H]
+   \centering
+    \includegraphics[width=0.75\textwidth]{imagenes/cap3/resEjemplo.png}
+    \caption{Solución a los obstáculos.}
+    \label{fig:ejemploSol}
+\end{figure}
+
+Cualquiera sean las soluciones que deseemos implementar, siempre hay que agregar hardware. Algunas soluciones son:
+
+En el caso de accesos a memoria, se puede resolver mediante las opciones por separado o combinadas.
+
+\begin{enumerate}
+  \item Desdoblamiento del caché L1 en caché de datos y caché de instrucciones.
+  \item Empleo de buffers de instrucciones implementados como pequeñas colas FIFO.
+  \item Ensanchamiento de los buses más allá de los anchos de palabra del procesador.
+\end{enumerate}
+
+También se puede aumentar la profundidad del pipeline. Esto produce etapas mucho más simples capaces de resolver en un clock su tarea.
+
+
+\subsubsection{Obstáculos de datos}
+
+Se producen cuando por \textbf{por efecto del pipeline}, una instrucción requiere de un dato antes de que este esté disponible por efecto de la secuencia lógica prevista en el programa.
+
+Consideremos el código que siguiente que corresponde a un procesador ARM. 
+
+\begin{verbatim}
+
+add R1, R2, R3 ; R1 es el destino de esta operación
+sub R4, R1, R5 ; R1 es operando pero aún no fue escrito el resultado
+and R6, R1, R7
+orr R8, R1, R9 ; Se ejecutan finalizada la inst anterior
+eor R10, R1, R11
+
+\end{verbatim}
+
+Leyendo el código, vemos dependencias para el registro R1. Hasta que la instrucción add no complete su operación, R1 no tiene un valor válido. Por lo tanto, no puede continuar aplicándolo en las restantes que lo utilicen.
+
+\begin{figure}[H]
+   \centering
+    \includegraphics[width=0.75\textwidth]{imagenes/cap3/obsDatos.png}
+    \caption{Dependencia de datos}
+    \label{fig:ejemploSol}
+\end{figure}
+
+
+Por cada dependencia, se pospone una operación. Entonces, el CPI aumenta en n siendo n la distancia entre las etapas del pipeline que requieren el mismo dato. 
+CPI = CPI + n.
+
+\begin{figure}[H]
+   \centering
+    \includegraphics[width=0.75\textwidth]{imagenes/cap3/obsDatos2.png}
+    \caption{Operaciones pospuestas.}
+    \label{fig:ejemploSol}
+\end{figure}
+
+La solución al obstáculo de datos es el \textbf{Forwarding}.
+
+Ni bien el resultado está disponible se lo realimenta a la entrada de la Unidad de Ejecución (ALU, FPU, etc).
+
+Así, la etapa que lo requiere lo dispone en el mismo ciclo de reloj en que se escribirá en el operando destino. Esto permite ahorrar el tiempo de escritura en el operando destino (no lo tiene que esperar).
+
+Se aplica solamente a las etapas posteriores que quedarían en estado stall.
+Aquellas etapas que a pesar de la dependencia de datos no quedarían en estado stall, reciben el resultado cuando este es aplicado en el operando destino.
+
+\begin{wrapfigure}{H}{5.5cm}
+\caption{A wrapped figure going nicely inside the text.}\label{wrap-fig:forward}
+\includegraphics[width=9.5cm]{imagenes/cap3/forwarding.png}
+\end{wrapfigure} 
+
+No resuelve completamente el problema pero reduce el efecto a la mitad.
+
+\begin{figure}[H]
+   \centering
+    \includegraphics[width=0.75\textwidth]{imagenes/cap3/solfor.png}
+    \caption{Solución de Forwarding}
+    \label{fig:ejemploSol}
+\end{figure}
+
+\textbf{Puede pasar que el forwarding no sea factible.} 
+
+\mynote{Este tipo de solución se aplica a operaciones de ALU denominadas back-to-back, ya que el bypass se efectúa desde la ALU a un registro entero del procesador.}
+
+Consideremos esta variante al código anterior
+
+\begin{verbatim}
+
+ldr R1, [R2] ; lectura de memoria no pasa por la ALU.
+sub R4, R1, R5 ; R1 no puede ser forwardeado al ingresar.
+and R6, R1, R7
+orr R8, R1, R9 
+eor R10, R1, R11
+
+\end{verbatim}
+
+En este caso, el dato proveniente de memoria es almacenado en elregistro de datos que interface con el bus de datos. Desde este registro es enviado directamente al registro destino, es decir R1. No puede adelantarse el valor a la siguiente etapa hasta que no se complete su escritura en R1.
+
+
+\subsubsection{Obstáculos de control}
+
+La máquina de estados de un pipeline busca instrucciones de forma secuencial.
+
+Un branch es una instrucción de control de flujo que provoca una discontinuidad en el flujo de ejecución. Un branch \textbf{es la peor} situación en pérdida de performance del pipeline.
+
+El branch hace que todo lo que estaba pre procesado deba descartarse, ya que son las instrucciones sucesoras secuenciales al branch en el programa. Al interrumpirse la secuencia de ejecicón, ya no son necesarias y deben ser reemplazadas por las instrucciones del target del branch.
+
+El pipeline se vacía. Se requieren n-1 ciclos de reloj para obtener el próximo resultado, siendo n la cantidad de etapas del pipeline. Esto se conoce como \text{branch penalty}.
+
+En la figura \ref{fig:branchpenalty} se esquematiza el branch penalty.
+
+\begin{figure}[H]
+   \centering
+    \includegraphics[width=1\textwidth]{imagenes/cap3/branches.png}
+    \caption{Branch penalty}
+    \label{fig:branchpenalty}
+\end{figure}
+
+En las interrupciones la situación es la misma mostrada que en el branch penalty. 
+
+En el caso de un branch, el principal incoveniente se tiene cuando éste es condicional ya que es necesario determinar si la condición es True o False.
+
+Si la condición es True, se habla de \textbf{branch taken}. Cambia el registro PC a la dirección de salto y limpia el pipeline.
+
+Si el resultado es False, se habla de \textbf{branch untaken}. El PC que apunta a la siguiente instrucción al branch(la sucesora secuencial) se mantiene y no se limpia el pipeline.
+
+Esta comprobación requiere llegar hasta la etapa de ejecución del pipeline. 
+
+En el caso de un salto incondicional, o llamada a un procedimiento, en la etapa de decodificación ya se tiene la certeza que se producirá el salto, y sólo se pierden menos elmentos del pipeline. Hay un impacto de menor magnitud.
+
+\mynote{
+
+Para neutralizar los efectos de las ramas, se puede usar forwarding que ayuda a minimizar los efectos de los diferentes casos, pero sólo disminuye algún ciclo de reljo del branch penalty. Aunque su mejora termina siendo insuficiente.
+
+}
+
+Las soluciones más eficaces son las que tienen que ver con el análisis de los algoritmos empleados y con la frecuencia en la que los compiladores emplean instrucciones de salto. Las unidades de predicción de saltos pueden ser simples o muy complejas y dependen no sólo de la generación del procesador sino también con el tipo de compilador? que se tome.
+
+\subsection{La bendita memoria}
+
+El problema de la memoria es el acceso.
+
+
+\begin{figure}[H]
+   \centering
+    \includegraphics[width=1\textwidth]{imagenes/cap3/cicloDeBusLectura.png}
+    \caption{Ciclo de bus de lectura}
+    \label{fig:busLect}
+\end{figure}
+
+
+\begin{figure}[H]
+   \centering
+    \includegraphics[width=1\textwidth]{imagenes/cap3/BusEscritura.png}
+    \caption{Ciclo de bus de escritura}
+    \label{fig:busEsc}
+\end{figure}
+
+Podemos ver que es más rápido leer que escribir.
+
+\mynote{
+
+La eficiencia de los procesador mejoró exponencialmente respecto de la performance de la memoria.
+Se necesita una estrategia de diseño para al menos minimizar el efecto de este gap. 
+
+En 2005 se presentar los chips multicore.
+}
+
+
+
 
 \end{document}
