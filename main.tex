@@ -601,6 +601,44 @@ En 2005 se presentar los chips multicore.
 }
 
 
+\section{La Memoria}
+\subsection{El sistema de memoria}
+
+Más que un componente es un subsistema porque aunque el ideal sea hacer una memoria de una sóla tecnología, hay que tener en cuenta el precio, el diseño y la velocidad de acceso. No tiene que ser perfecto, tiene que ser funcional. 
+
+Por eso, la realidad es que se diseñan sistemas muy simples, con muy pocas funciones a implementar de modo que se pueda basar el computador en Micro-controladores.
+
+
+\subsection{Tecnologías de Memoria}
+\subsection{Memoria Cache}
+
+\subsubsection{Line Placement}
+\subsubsubsection{Cache Mapeo directo}
+\subsubsubsection{Cache Set Asociativo}
+
+Trata de disminuir la probabilidad de Conflict Miss, manteniendo dentro de límites moderados tanto el costo de complejidad de hardware como su consecuente costo energético. El conflicto aparece por asccesos recurrentes a direcciones de memoria que resultan en la misma línea en diferentes bloques o páginas de memorial principal.
+
+Un controlador Cache Set-asociativo modifica la forma de organizar la memoria cache y la forma en que ésta mapea en la memoria principal.
+
+Ya sabemos que la Mmemoria Cache se organiza en bancos(también llamdas vías). Si la Memoria Cache de 32KiB del ejemplo anterior se organiza como set asociativa de 8 vías(bancos), se compondrá de 8 bancos de SRAM de 4KiB cada uno.
+
+Si el tamaño de línea se mantiene (32 Bytes) cada banco(vía) ahora contiene 128 líneas.
+
+La memoria principal, sigue siendo tratada como un conjunto de bancos, cuyo tamaño ahora es igual al de cada banco del cache. 
+
+Continuando con el ejemplo numérico, cada Banco de Memoria del sistema ahora será de 4KiB, igual tamaño que el de una vía del cache.
+
+
+
+\subsection{Cache en sistemas multiprocesador}
+\subsection{Memorias Dinámicas}
+\subsection{Standards}
+\subsection{Controladores de Memoria}
+\subsection{Configuración}
+\subsection{Integración con el sistema Caché}
+\subsection{Casos prácticos}
+\subsection{SRAM Cuestiones de implementación}
+\subsection{DRAM Detalles de implementación}
 
 
 \end{document}
